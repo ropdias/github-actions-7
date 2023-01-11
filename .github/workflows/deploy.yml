@@ -13,6 +13,9 @@ jobs:
   test:
     environment: testing
     runs-on: ubuntu-latest
+    container:
+      image: node:16
+      # env: # we can add env variables the image might need to run
     env:
       MONGODB_CONNECTION_PROTOCOL: mongodb+srv
       MONGODB_CLUSTER_ADDRESS: cluster0.efcdi7r.mongodb.net
