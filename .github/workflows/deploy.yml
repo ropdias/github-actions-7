@@ -4,6 +4,8 @@ on:
     branches:
       - main
       - dev
+    paths-ignore:
+      - '**/README.md' # This will ignore all pushs that changes only the README.md
 env:
   CACHE_KEY: node-deps
   MONGODB_DB_NAME: gha-demo
