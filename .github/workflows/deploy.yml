@@ -13,15 +13,24 @@ jobs:
   test:
     environment: testing
     runs-on: ubuntu-latest
-    container:
+    container: # this job will run inside a container
       image: node:16
       # env: # we can add env variables the image might need to run
     env:
-      MONGODB_CONNECTION_PROTOCOL: mongodb+srv
-      MONGODB_CLUSTER_ADDRESS: cluster0.efcdi7r.mongodb.net
-      MONGODB_USERNAME: ${{ secrets.MONGODB_USERNAME }}
-      MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}
+      MONGODB_CONNECTION_PROTOCOL: mongodb # you should use just mongodb here if you are using an image of the mongodb
+      MONGODB_CLUSTER_ADDRESS: mongodb # if you are running inside a container this should be the service name
+      MONGODB_USERNAME: root # ${{ secrets.MONGODB_USERNAME }}
+      MONGODB_PASSWORD: example # ${{ secrets.MONGODB_PASSWORD }}
       PORT: 8080
+    services: # container services that this job will have, they won't run in the runner itself, always inside images
+      mongodb: # you can specify any name to the service, this will be a label for a connection address
+        image: mongo
+        env: # some images needs some env variables
+          # the variables below doenst need to be complex for this case because
+          # this is only a test database that will run as long as our workflow is running
+          MONGO_INITDB_ROOT_USERNAME: root # Should be the same as the env variable for the job MONGODB_USERNAME
+          MONGO_INITDB_ROOT_PASSWORD: example # Should be the same as the env variable for the job MONGODB_PASSWORD
+      # another-service: ...
     steps:
       - name: Get Code
         uses: actions/checkout@v3
